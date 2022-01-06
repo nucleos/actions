@@ -1,0 +1,21 @@
+name: "Run symfony command"
+
+description: "Run symfony commands using kernel class."
+
+inputs:
+  command:
+    default: ""
+    description: "Command to run"
+    required: true
+  kernel:
+    default: "App\\Kernel"
+    description: "FCQDN of the Kernel class"
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: "Run: ${{ inputs.command }}"
+      run: "KERNEL_CLASS=\"${{ inputs.kernel }}\" ${{ github.action_path }}/console ${{ inputs.command }}"
+      shell: "bash"
