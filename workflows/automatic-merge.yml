@@ -1,0 +1,19 @@
+name: "Automatic Merge"
+
+on:
+  workflow_call:
+    secrets:
+      GITHUB_ADMIN_TOKEN:
+        required: true
+
+jobs:
+  merge:
+    name: "Merge Pull Requests"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+    - name: "Merge"
+      uses: "nucleos/auto-merge-action@1.2.0"
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_ADMIN_TOKEN }}"
