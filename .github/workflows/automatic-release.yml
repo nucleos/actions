@@ -7,8 +7,6 @@ on:
         required: true
       GIT_AUTHOR_EMAIL:
         required: true
-      GITHUB_TOKEN:
-        required: true
       GITHUB_ADMIN_TOKEN:
         required: true
       SIGNING_SECRET_KEY:

@@ -72,25 +72,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer"
-          restore-keys: "php${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
-
-      - name: "Create cache directory for php-cs-fixer"
-        run: "mkdir -p .build/php-cs-fixer"
-
-      - name: "Cache cache directory for php-cs-fixer"
-        uses: "actions/cache@v2"
-        with:
-          path: ".build/php-cs-fixer"
-          key: "php${{ matrix.php-version }}-php-cs-fixer"
-          restore-keys: "php${{ matrix.php-version }}-php-cs-fixer"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Run php-cs-fixer"
         env:
@@ -119,15 +102,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}, curl"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "${{ matrix.php-version }}-composer"
-          restore-keys: "${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Run phpstan"
         run: "make phpstan"
@@ -139,7 +115,7 @@ jobs:
         run: "make phpmd"
 
   tests:
-    name: "Test (PHP ${{ matrix.php-version }}, symfony ${{ matrix.symfony }}, ${{ matrix.dependencies }})"
+    name: "Test: PHP ${{ matrix.php-version }}, Symfony ${{ matrix.symfony }}, ${{ matrix.dependencies }})"
 
     needs: "generate-matrix"
 
@@ -169,23 +145,13 @@ jobs:
       - name: 'Install Symfony Flex'
         run: "composer global require --prefer-dist --no-progress --ansi symfony/flex"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}"
-          restore-keys: "php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}"
-
       - name: "Lock symfony version"
         run: "composer config extra.symfony.require ${{ matrix.symfony }}.*"
 
-      - name: "Install lowest dependencies with composer"
-        if: matrix.dependencies == 'lowest'
-        run: "composer update --no-interaction --no-progress --prefer-lowest"
-
-      - name: "Install highest dependencies with composer"
-        if: matrix.dependencies == 'highest'
-        run: "composer update --no-interaction --no-progress"
+      - name: "Install Composer dependencies (${{ matrix.dependencies }})"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "Run tests with phpunit"
         run: "make test"
@@ -211,15 +177,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer"
-          restore-keys: "php${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Collect code coverage with pcov and phpunit"
         run: "make coverage"
@@ -250,15 +209,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer"
-          restore-keys: "php${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Run mutation tests with pcov and infection/infection"
         run: "make infection"
@@ -284,15 +236,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer"
-          restore-keys: "php${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Lint composer.json"
         run: "make lint-composer"
@@ -318,15 +263,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer"
-          restore-keys: "php${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Lint container"
         run: "make lint-symfony-container"
@@ -352,15 +290,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer"
-          restore-keys: "php${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Lint twig files"
         run: "tools/console lint:twig src tests --format=github"
@@ -386,15 +317,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer"
-          restore-keys: "php${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Lint xliff files"
         run: "tools/console lint:xliff src tests --format=github"
@@ -420,15 +344,8 @@ jobs:
           extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php${{ matrix.php-version }}-composer"
-          restore-keys: "php${{ matrix.php-version }}-composer"
-
-      - name: "Install locked dependencies with composer"
-        run: "composer install --no-interaction --no-progress"
+      - name: "Install Composer dependencies"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Lint yaml files"
         run: "tools/console lint:yaml src tests --format=github"
