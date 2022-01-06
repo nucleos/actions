@@ -8,11 +8,11 @@ on:
         required: false
         type: string
       PHP_VERSIONS:
-        default: '8.0 8.1'
+        default: '8.0,8.1'
         required: false
         type: string
       SYMFONY_VERSIONS:
-        default: '5.4 6.0'
+        default: '5.4,6.0'
         required: false
         type: string
     secrets:
@@ -21,24 +21,34 @@ on:
 
 jobs:
   generate-matrix:
-    name: "Generate build matrix"
+    name: "Generate test matrix"
 
     runs-on: "ubuntu-latest"
 
     steps:
-      - uses: "jungwinter/split@v2"
-        id: "set-php-matrix"
+      - id: "set-php-matrix"
+        uses: "actions/github-script@v5"
+        env:
+          PHP_VERSIONS: '${{ inputs.PHP_VERSIONS }}'
         with:
-          msg: '/release split ${{ inputs.PHP_VERSIONS }}'
+          script: |
+            const { PHP_VERSIONS } = process.env
+            return "[\"" + (PHP_VERSIONS.split(",").map(s => s.trim()).join("\", \"")) + "\"]"
+          result-encoding: string
 
-      - uses: "jungwinter/split@v2"
-        id: "set-symfony-matrix"
+      - id: "set-symfony-matrix"
+        uses: "actions/github-script@v5"
+        env:
+          SYMFONY_VERSIONS: '${{ inputs.SYMFONY_VERSIONS }}'
         with:
-          msg: '/release split ${{ inputs.SYMFONY_VERSIONS }}'
+          script: |
+            const { SYMFONY_VERSIONS } = process.env
+            return "[\"" + (SYMFONY_VERSIONS.split(",").map(s => s.trim()).join("\", \"")) + "\"]"
+          result-encoding: string
 
     outputs:
-      php-matrix: "${{ steps.set-php-matrix.outputs.php.matrix }}"
-      symfony-matrix: "${{ steps.set-symfony-matrix.outputs.symfony-matrix }}"
+      php-matrix: "${{ steps.set-php-matrix.outputs.result }}"
+      symfony-matrix: "${{ steps.set-symfony-matrix.outputs.result }}"
 
 
   coding-standards:
