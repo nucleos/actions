@@ -15,6 +15,10 @@ on:
         default: '5.4,6.0'
         required: false
         type: string
+      SYMFONY_KERNEL:
+        default: ''
+        required: false
+        type: string
     secrets:
       CODECOV_TOKEN:
         required: true
@@ -147,6 +151,7 @@ jobs:
 
       - name: "Lock symfony version"
         run: "composer config extra.symfony.require ${{ matrix.symfony }}.*"
+        if: "${{ matrix.symfony != '' }}"
 
       - name: "Install Composer dependencies (${{ matrix.dependencies }})"
         uses: "ramsey/composer-install@v2"
@@ -247,6 +252,8 @@ jobs:
 
     runs-on: "ubuntu-latest"
 
+    if: "${{ inputs.SYMFONY_KERNEL != '' }}"
+
     strategy:
       matrix:
         php-version:
@@ -267,12 +274,17 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: "Lint container"
-        run: "make lint-symfony-container"
+        uses: "nucleos/actions/symfony@main"
+        with:
+          kernel: "${{ inputs.SYMFONY_KERNEL }}"
+          command: "lint:container"
 
   twig:
     name: "Lint twig files"
 
     runs-on: "ubuntu-latest"
+
+    if: "${{ inputs.SYMFONY_KERNEL != '' }}"
 
     strategy:
       matrix:
@@ -294,12 +306,17 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: "Lint twig files"
-        run: "tools/console lint:twig src tests --format=github"
+        uses: "nucleos/actions/symfony@main"
+        with:
+          kernel: "${{ inputs.SYMFONY_KERNEL }}"
+          command: "lint:twig src tests --format=github"
 
   xliff:
     name: "Lint XLIFF files"
 
     runs-on: "ubuntu-latest"
+
+    if: "${{ inputs.SYMFONY_KERNEL != '' }}"
 
     strategy:
       matrix:
@@ -321,12 +338,17 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: "Lint xliff files"
-        run: "tools/console lint:xliff src tests --format=github"
+        uses: "nucleos/actions/symfony@main"
+        with:
+          kernel: "${{ inputs.SYMFONY_KERNEL }}"
+          command: "lint:xliff src tests --format=github"
 
   yaml:
     name: "Lint YML files"
 
     runs-on: "ubuntu-latest"
+
+    if: "${{ inputs.SYMFONY_KERNEL != '' }}"
 
     strategy:
       matrix:
@@ -348,4 +370,7 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: "Lint yaml files"
-        run: "tools/console lint:yaml src tests --format=github"
+        uses: "nucleos/actions/symfony@main"
+        with:
+          kernel: "${{ inputs.SYMFONY_KERNEL }}"
+          command: "lint:yaml src tests --format=github"
