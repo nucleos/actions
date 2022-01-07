@@ -274,7 +274,7 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: "Lint container"
-        uses: "nucleos/actions/symfony@main"
+        uses: "nucleos/symfony-console-action@1.0.0"
         with:
           kernel: "${{ inputs.SYMFONY_KERNEL }}"
           command: "lint:container"
@@ -306,7 +306,7 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: "Lint twig files"
-        uses: "nucleos/actions/symfony@main"
+        uses: "nucleos/symfony-console-action@1.0.0"
         with:
           kernel: "${{ inputs.SYMFONY_KERNEL }}"
           command: "lint:twig src tests --format=github"
@@ -338,7 +338,7 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: "Lint xliff files"
-        uses: "nucleos/actions/symfony@main"
+        uses: "nucleos/symfony-console-action@1.0.0"
         with:
           kernel: "${{ inputs.SYMFONY_KERNEL }}"
           command: "lint:xliff src tests --format=github"
@@ -370,7 +370,7 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: "Lint yaml files"
-        uses: "nucleos/actions/symfony@main"
+        uses: "nucleos/symfony-console-action@1.0.0"
         with:
           kernel: "${{ inputs.SYMFONY_KERNEL }}"
           command: "lint:yaml src tests --format=github"
