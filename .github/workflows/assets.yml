@@ -1,0 +1,40 @@
+name: 'Assets'
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        default: "."
+        description: "Which directory to use as working directory"
+        required: true
+
+jobs:
+  build:
+    name: 'Build Assets'
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Using Node"
+        uses: "actions/setup-node@v2.5.1"
+
+      - name: "Install dependencies"
+        run: "yarn --cwd ${{ inputs.working-directory }}"
+
+      - name: "Build"
+        run: "yarn --cwd ${{ inputs.working-directory }} build"
+
+      - name: "Test"
+        run: "yarn --cwd ${{ inputs.working-directory }} test"
+
+      - name: "Lint"
+        run: "yarn --cwd ${{ inputs.working-directory }} check-lint"
+
+      - name: "Format"
+        run: "yarn --cwd ${{ inputs.working-directory }} check-format"
+
+      - name: "Check size"
+        run: "yarn --cwd ${{ inputs.working-directory }} size"
