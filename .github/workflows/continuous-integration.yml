@@ -147,7 +147,9 @@ jobs:
           php-version: "${{ matrix.php-version }}"
 
       - name: 'Install Symfony Flex'
-        run: "composer global require --prefer-dist --no-progress --ansi symfony/flex"
+        run: | 
+          composer global config --no-plugins allow-plugins.symfony/flex true
+          composer global require --prefer-dist --no-progress --ansi symfony/flex
 
       - name: "Lock symfony version"
         run: "composer config extra.symfony.require ${{ matrix.symfony }}.*"
