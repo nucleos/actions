@@ -8,11 +8,11 @@ on:
         required: false
         type: string
       PHP_VERSIONS:
-        default: '8.0,8.1,8.2'
+        default: '8.1,8.2'
         required: false
         type: string
       SYMFONY_VERSIONS:
-        default: '5.4,6.0'
+        default: '5.4,6.2'
         required: false
         type: string
       SYMFONY_KERNEL:
