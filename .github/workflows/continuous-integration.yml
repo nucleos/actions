@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - id: "set-php-matrix"
-        uses: "actions/github-script@v6"
+        uses: "actions/github-script@v7"
         env:
           PHP_VERSIONS: '${{ inputs.PHP_VERSIONS }}'
         with:
@@ -41,7 +41,7 @@ jobs:
           result-encoding: string
 
       - id: "set-symfony-matrix"
-        uses: "actions/github-script@v6"
+        uses: "actions/github-script@v7"
         env:
           SYMFONY_VERSIONS: '${{ inputs.SYMFONY_VERSIONS }}'
         with:
