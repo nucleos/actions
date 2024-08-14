@@ -15,6 +15,10 @@ on:
         default: '5.4,6.3'
         required: false
         type: string
+      SYMFONY_KERNEL:
+        default: ''
+        required: false
+        type: string
     secrets:
       CODECOV_TOKEN:
         required: true
