@@ -8,11 +8,11 @@ on:
         required: false
         type: string
       PHP_VERSIONS:
-        default: '8.2,8.3'
+        default: '8.2,8.3,8.4'
         required: false
         type: string
       SYMFONY_VERSIONS:
-        default: '5.4,6.3'
+        default: '6.4,7.2 '
         required: false
         type: string
       SYMFONY_KERNEL:
@@ -63,7 +63,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.3"
+          - "8.4"
 
     steps:
       - name: "Checkout"
@@ -92,7 +92,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.3"
+          - "8.4"
 
     steps:
       - name: "Checkout"
@@ -168,7 +168,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.3"
+          - "8.4"
 
     steps:
       - name: "Checkout"
@@ -200,7 +200,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.3"
+          - "8.4"
 
     steps:
       - name: "Checkout"
@@ -227,7 +227,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.3"
+          - "8.4"
 
     steps:
       - name: "Checkout"
