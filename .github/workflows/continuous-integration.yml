@@ -12,7 +12,7 @@ on:
         required: false
         type: string
       SYMFONY_VERSIONS:
-        default: '5.4,6.3'
+        default: '6.4,7.2 '
         required: false
         type: string
       SYMFONY_KERNEL:
