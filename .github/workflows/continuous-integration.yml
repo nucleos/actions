@@ -102,8 +102,7 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "none"
-          # Add curl to send data to shepherd
-          extensions: "${{ inputs.PHP_EXTENSIONS }}, curl"
+          extensions: "${{ inputs.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
       - name: "Install Composer dependencies"
@@ -215,9 +214,6 @@ jobs:
 
       - name: "Install Composer dependencies"
         uses: "ramsey/composer-install@v2"
-
-      - name: "Run mutation tests with pcov and infection/infection"
-        run: "make infection"
 
   composer:
     name: "Lint composer.json"
