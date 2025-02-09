@@ -28,6 +28,7 @@ jobs:
     name: "Generate test matrix"
 
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
 
     steps:
       - id: "set-php-matrix"
@@ -59,6 +60,7 @@ jobs:
     name: "Coding Standards"
 
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
 
     strategy:
       matrix:
@@ -88,6 +90,7 @@ jobs:
     name: "Static Code Analysis"
 
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
 
     strategy:
       matrix:
@@ -120,6 +123,7 @@ jobs:
     needs: "generate-matrix"
 
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
 
     strategy:
       matrix:
@@ -163,6 +167,7 @@ jobs:
     name: "Code Coverage"
 
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
 
     strategy:
       matrix:
@@ -195,6 +200,7 @@ jobs:
     name: "Mutation Tests"
 
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
 
     strategy:
       matrix:
@@ -219,6 +225,7 @@ jobs:
     name: "Lint composer.json"
 
     runs-on: "ubuntu-latest"
+    timeout-minutes: 10
 
     strategy:
       matrix:
