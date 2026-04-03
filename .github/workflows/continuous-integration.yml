@@ -122,6 +122,8 @@ jobs:
 
     needs: "generate-matrix"
 
+    if: "${{ !(matrix.php-version == '8.3' && startsWith(matrix.symfony, '8.')) }}"
+
     runs-on: "ubuntu-latest"
     timeout-minutes: 10
 
