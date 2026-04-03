@@ -51,9 +51,33 @@ jobs:
             return "[\"" + (SYMFONY_VERSIONS.split(",").map(s => s.trim()).join("\", \"")) + "\"]"
           result-encoding: string
 
+      - id: "set-test-matrix"
+        uses: "actions/github-script@v8"
+        env:
+          PHP_VERSIONS: '${{ inputs.PHP_VERSIONS }}'
+          SYMFONY_VERSIONS: '${{ inputs.SYMFONY_VERSIONS }}'
+        with:
+          script: |
+            const phpVersions = process.env.PHP_VERSIONS.split(",").map(s => s.trim()).filter(Boolean)
+            const symfonyVersions = process.env.SYMFONY_VERSIONS.split(",").map(s => s.trim()).filter(Boolean)
+            const dependencies = ["lowest", "highest"]
+            const include = []
+            for (const phpVersion of phpVersions) {
+              for (const symfonyVersion of symfonyVersions) {
+                // Exclude unsupported combinations: PHP 8.3 with Symfony 8.x
+                if (phpVersion === "8.3" && symfonyVersion.startsWith("8.")) continue
+                for (const dependency of dependencies) {
+                  include.push({ "php-version": phpVersion, symfony: symfonyVersion, dependencies: dependency })
+                }
+              }
+            }
+            return JSON.stringify({ include })
+          result-encoding: string
+
     outputs:
       php-matrix: "${{ steps.set-php-matrix.outputs.result }}"
       symfony-matrix: "${{ steps.set-symfony-matrix.outputs.result }}"
+      test-matrix: "${{ steps.set-test-matrix.outputs.result }}"
 
 
   coding-standards:
@@ -122,20 +146,11 @@ jobs:
 
     needs: "generate-matrix"
 
-    if: "${{ !(matrix.php-version == '8.3' && startsWith(matrix.symfony, '8.')) }}"
-
     runs-on: "ubuntu-latest"
     timeout-minutes: 10
 
     strategy:
-      matrix:
-        php-version: "${{ fromJson(needs.generate-matrix.outputs.php-matrix) }}"
-
-        symfony: "${{ fromJson(needs.generate-matrix.outputs.symfony-matrix) }}"
-
-        dependencies:
-          - "lowest"
-          - "highest"
+      matrix: "${{ fromJson(needs.generate-matrix.outputs.test-matrix) }}"
 
     steps:
       - name: "Checkout"
